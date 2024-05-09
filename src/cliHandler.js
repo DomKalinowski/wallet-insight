@@ -1,12 +1,12 @@
-const { Table } = require("console-table-printer");
-const config = require("../walletconfig.json");
-const { analyser } = require("./csvParse");
+import { Table } from "console-table-printer";
+import config from "../walletconfig.json" assert { type: "json" };
+import { cliTableConfig, printResultsBuilder } from "./cliTable.js";
+import { analyser } from "./csvParse.js";
 
-const { cliTableConfig, printResultsBuilder } = require("./cliTable");
-const cliTable = new Table(cliTableConfig);
-
-module.exports = (options) => {
-    const hasFilesInConfig = Object.values(config.files).length > 0;
+export default (options) => {
+    const { dir, files } = config;
+    const cliTable = new Table(cliTableConfig(options));
+    const hasFilesInConfig = Object.values(files).length > 0;
     const state = {
         ...options,
         cliTable,
@@ -16,8 +16,7 @@ module.exports = (options) => {
     const printResults = printResultsBuilder(state);
 
     if (options.file || (options.statement && hasFilesInConfig)) {
-        const filePath =
-            options.file ?? config.dir + config.files[options.statement];
+        const filePath = options.file ?? dir + files[options.statement];
 
         Promise.resolve(
             analyser({
@@ -27,12 +26,12 @@ module.exports = (options) => {
             }),
         ).then(printResults);
     } else if (options.files || hasFilesInConfig) {
-        const statementKeys = Object.keys(config.files);
+        const statementKeys = Object.keys(files);
 
         Promise.all(
             statementKeys.map((statement) =>
                 analyser({
-                    filePath: config.dir + config.files[statement],
+                    filePath: dir + files[statement],
                     statement,
                     state,
                 }),

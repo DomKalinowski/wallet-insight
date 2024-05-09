@@ -1,5 +1,5 @@
-const { program } = require("commander");
-const cliHandler = require("./src/cliHandler");
+import { program } from "commander";
+import cliHandler from "./src/cliHandler.js";
 
 program
     .name("wicli")
@@ -16,9 +16,11 @@ program
     .option("-t, --type <string>", "String to filter type by", "")
     .option("-m, --min <number>", "Minimum amount to filter amount by")
     .option("-M, --max <number>", "Maximum amount to filter amount by")
+    .option("--from [DD/MM/YYYY]", "From date")
+    .option("--to [DD/MM/YYYY]", "To date")
     .option("-r, --reference <string>", "String to filter memo by", "")
-    .option("-s, --sort <string>", "String to filter memo by", "")
-    .option("-d, --sortDir <string>", "String to filter memo by", "")
+    .option("-s, --sort <string>", "String to filter memo by")
+    .option("-d, --sortDir [asc|desc]", "String to filter memo by")
     .action(cliHandler);
 
 program.parse();

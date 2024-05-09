@@ -1,8 +1,8 @@
-const { monthNames } = require("./monthColors");
-const config = require("../walletconfig.json");
-const csv = require("@fast-csv/parse");
-const fs = require("node:fs");
+import { parse } from "@fast-csv/parse";
+import config from "../walletconfig.json" assert { type: "json" };
+import { monthNames } from "./monthColors.js";
 
+import { createReadStream } from "node:fs";
 const processRow = (props) => (row) => {
     const { cliTable, min, max, type, reference } = props;
 
@@ -15,11 +15,11 @@ const processRow = (props) => (row) => {
         maybeAtLeastMinAmount &&
         maybeAtMostMaxAmount &&
         row.type?.includes(type) &&
-        row.reference?.includes(reference)
+        row.reference.toLowerCase()?.includes(reference.toLowerCase())
     ) {
         props.totalAmount += Number.parseFloat(row.amount);
 
-        const dateSplit = row.date.split("/")
+        const dateSplit = row.date.split("/");
         const month = dateSplit[1];
         const year = dateSplit[2];
 
@@ -46,12 +46,16 @@ const csvParseConfig = (statement) => ({
 
 function analyser({ filePath, statement, state }) {
     return new Promise((resolve, reject) =>
-        fs
-            .createReadStream(filePath)
-            .pipe(csv.parse(csvParseConfig(statement)))
+        createReadStream(filePath)
+            .pipe(parse(csvParseConfig(statement)))
             .transform((data) => ({
                 ...data,
-                reference: data.reference.replaceAll("\t", "").trim(),
+                reference: [
+                    data.name,
+                    data.reference.replaceAll("\t", "").trim(),
+                ]
+                    .filter(Boolean)
+                    .join(" | "),
                 statement,
             }))
             .on("error", reject)
@@ -60,4 +64,5 @@ function analyser({ filePath, statement, state }) {
     );
 }
 
-exports.analyser = analyser;
+const _analyser = analyser;
+export { _analyser as analyser };
