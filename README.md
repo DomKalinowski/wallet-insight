@@ -2,6 +2,7 @@
 <p align="center">
 <img src="https://github.com/DomKalinowski/wallet-insight/assets/46345195/6ab2af4b-2e44-4770-a213-9cdc541ceca7" alt="WalletInsightMascot" height="250">
 </p>
+
 ## Introduction
 This CLI tool combines and analyses bank statements from multiple sources into a single, sortable table. Developed not to deal with MS Excel, it's a personal project aimed at understanding financial patterns over the past five years to aid in future budgeting and financial planning.
 
