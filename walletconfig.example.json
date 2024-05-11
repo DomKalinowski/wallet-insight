@@ -1,0 +1,72 @@
+{
+    "dir": "/path/to/your/bank/statements/",
+    "statements": {
+        "first-bank": {
+            "file": "first-bank_account_statement_2000-01.12.2050.csv",
+            "columns": {
+                "ID": null,
+                "Date": "date",
+                "Account": null,
+                "Amount": "amount",
+                "Type": "type",
+                "Reference": "reference",
+                "_blank": null
+            }
+        },
+        "second-bank": {
+            "file": "second-bank_account_statement_2000-01.12.2050.csv",
+            "columns": {
+                "Transaction ID": null,
+                "Date": "date",
+                "Time": null,
+                "Type": "type",
+                "Name": null,
+                "Category": null,
+                "Amount": "amount",
+                "Currency": null,
+                "Notes": null,
+                "Address": null,
+                "Receipt": null,
+                "Description": "reference"
+            }
+        }
+    },
+    "output": {
+        "tables": {
+            "💪🔏 gym-memberships": [
+                {
+                    "reference": "David Lloyd",
+                    "absMax": 300,
+                    "absMin": 100
+                },
+                {
+                    "reference": "The Gym"
+                },
+                {
+                    "reference": "PureGym"
+                },
+                {
+                    "reference": "Virgin Active",
+                    "absMin": 20
+                }
+            ],
+            "💪💸 gym-puchases": [
+                {
+                    "reference": "David Lloyd",
+                    "absMax": 99,
+                    "absMin": 0
+                },
+                {
+                    "reference": "The Gym",
+                    "absMax": 30,
+                    "absMin": 0
+                },
+                {
+                    "reference": "Virgin Active",
+                    "absMax": 15,
+                    "absMin": 0
+                }
+            ]
+        }
+    }
+}
