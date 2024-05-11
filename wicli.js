@@ -16,9 +16,11 @@ program
     .option("-t, --type <string>", "String to filter type by", "")
     .option("-m, --min <number>", "Minimum amount to filter amount by")
     .option("-M, --max <number>", "Maximum amount to filter amount by")
+    .option("-a, --absMin <number>", "Minimum amount to filter amount by")
+    .option("-A, --absMax <number>", "Maximum amount to filter amount by")
     .option("--from [DD/MM/YYYY]", "From date")
     .option("--to [DD/MM/YYYY]", "To date")
-    .option("-r, --reference <string>", "String to filter memo by", "")
+    .option("-r, --reference <string>", "String to filter references by", "")
     .option("-s, --sort <string>", "String to filter memo by")
     .option("-d, --sortDir [asc|desc]", "String to filter memo by")
     .action(cliHandler);

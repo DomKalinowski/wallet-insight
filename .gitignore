@@ -1,6 +1,7 @@
 # Project specific
 
 walletconfig.json
+walletconfig.*.json
 
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
