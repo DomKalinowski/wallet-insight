@@ -1,6 +1,5 @@
 import { createReadStream } from "node:fs";
 import { parse } from "@fast-csv/parse";
-import config from "../walletconfig.json" assert { type: "json" };
 import { monthNames } from "./monthColors.js";
 import {
     maybeBetweenAbsoluteAmount,
@@ -49,8 +48,9 @@ const checkRow = (
  * @param {Object} [cliOptions] - Optional. CLI options against which to check the current row.
  * @returns {Function} A function that accepts a `row` object and processes it according to the given state.
  */
-const processAndFilterRow = (state, cliOptions) => (row) => {
+const processAndFilterRow = (state, cliOptions, config) => (row) => {
     const { cliTable, hasCliOptions, tableName } = state;
+
     const tableCriteria = config?.output?.tables[tableName];
 
     let shouldAddRow;
@@ -89,7 +89,7 @@ const processAndFilterRow = (state, cliOptions) => (row) => {
  * @property {Array<string|undefined>} headers - An array of header names to be used when parsing the CSV data. Undefined entries represent headers that were specified in the configuration as null to be hidden in the table.
  * @property {boolean} renameHeaders - Whether or not to rename headers in the parsed output.
  */
-const csvParseConfig = (statement) => ({
+const csvParseConfig = (statement, config) => ({
     ignoreEmpty: true,
     headers: Object.values(config.statements[statement].columns).map((v) =>
         v ? v : undefined,
@@ -109,10 +109,10 @@ const csvParseConfig = (statement) => ({
  * @param {Object} params.state - An object that represents the state passed to the `processAndFilterRow` function for additional processing.
  * @returns {Promise} A Promise that resolves when the CSV file processing is complete, or rejects if an error occurs.
  */
-export function analyser({ filePath, statement, state, cliOptions }) {
+export function analyser({ filePath, statement, state, cliOptions, config }) {
     return new Promise((resolve, reject) =>
         createReadStream(filePath)
-            .pipe(parse(csvParseConfig(statement)))
+            .pipe(parse(csvParseConfig(statement, config)))
             .transform((data) => ({
                 ...data,
                 reference: [
@@ -124,7 +124,7 @@ export function analyser({ filePath, statement, state, cliOptions }) {
                 statement,
             }))
             .on("error", reject)
-            .on("data", processAndFilterRow(state, cliOptions))
+            .on("data", processAndFilterRow(state, cliOptions, config))
             .on("end", resolve),
     );
 }
